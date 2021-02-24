@@ -1,0 +1,51 @@
+/* 1 - Créez un paragraphe contenant le texte 42 et un bouton ; chaque clic incrémente ce chiffre de un. 
+
+Mini Challenge : Le texte du paragraphe doit être 'Vous n'avez pas encore cliqué sur le bouton.' 
+et sera remplacé par 'Vous avez cliqué sur ce bouton x fois' là ou x commence à un et augmente de 1 à chaque clic.
+Tips : .addEventListener, .innerHTML, variable, concaténation
+*/
+
+
+/* 2 - Créez un paragraphe et un bouton ; chaque clic vous donne les chiffres gagnants du Lotto de la semaine prochaine (disclaimer: engagement non contractuel ;p). 
+NB : Le Lotto est un tirage aléatoire de 6 chiffres allant de 1 à 45.
+
+Challenge : Il n'est plus possible de tirer deux fois le même chiffre et on ne peut cliquer sur le bouton qu'une fois.
+Tips : Regardez la méthode .splice() d'array.
+*/
+
+
+/* 3 - Créez deux paragraphes ; leur longueur représentent le pourcentage de gens qui ont répondu oui ou non à un sondage.
+NB : Stocker dans une variable percentPositive un nombre arbitraire allant de 0 à 1 représentant le pourcentage de réponses positives. 
+Tips : .style.width, %, multiplication
+
+Challenge : Ajoutez via JS des attributs title aux paragraphes contenant respectivement 'Oui (75%)' et 'Non (25%)' (par exemple)
+*/
+
+
+/* 4 - Créez une table (3 colonnes et 4 lignes dont la dernière est vide) et un bouton ; le clic vous donnera le total pour chaque colonne dans la dernière ligne.
+Tips : ...:nth-of-type(...)
+*/
+
+
+/* 5 - Créez un paragraphe carré avec une bordure via CSS et un slider HTML ; le changement du slider affecte l'arrondi des coins du paragraphe.
+Tips : <input type="range" min="0" max="100" value="0" />, change, #monInput.value, border-top-left-radius, border-top-right-radius, border-bottom-right-radius, border-bottom-left-radius  
+*/
+
+
+/* 6 - Notre page web a été envahie par un input (type="text") réfractaire ; Il remplace son contenu par des insultes aléatoires dès qu'on lui tourne le dos...
+Tips : blur
+*/
+
+
+/* 7 - Validez la soumission d'un formulaire (2 champs : Code postal et Email) en réutilisant isValidPostalCode() et isValidMail().
+Tips : e.preventDefault(), .value, #monForm.submit(), submit
+*/
+
+
+/* 8 - Créez une calculatrice (un champ et 5 boutons dont un reset) à l'aide des quatre fonctions déjà créées addition, soustraction, multiplication, division
+tips : attention à la division par zéro, ergonomie
+*/
+
+
+
+
