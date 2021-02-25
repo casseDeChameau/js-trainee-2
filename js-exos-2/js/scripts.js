@@ -1,5 +1,7 @@
 // * -------------------------------    VARIABLES   ----------------------------------//
 let siteTitle = document.querySelector('.splash');
+let goku = document.querySelector('.sangoku');
+let jump = document.querySelector('.jump');
 // ex1
 let btn1 = document.querySelector('.ex1 button');
 let ex1p1 = document.querySelector('.ex1 .p1');
@@ -63,7 +65,16 @@ let postcode = document.querySelector('.ex7 [name="postcode"]');
 let ex7btn = document.querySelector('.ex7 button');
 let light = document.querySelector('.ex7 .light');
 // ex 8
-
+let calcBtns = document.querySelectorAll('.calc-btns button');
+let calcBtnArray = Array.from(calcBtns);
+let calcEntry = document.querySelector('[name="number"]');
+let response = document.querySelector('.result p');
+let firstNumber;
+let secondNumber;
+let operator;
+let operatorClic;
+let result;
+response.textContent = "";
 // ex Ajax
 let xhr = new XMLHttpRequest();
 let ajaxBtn = document.querySelector('.exajax button');
@@ -200,7 +211,76 @@ function resetResult() {
     light.style.backgroundColor = 'lightgrey';
 }
 // ! -------------------------- ex8
+function reset() {
+    firstNumber = null;
+    secondNumber = null;
+    operatorClic = null;
+    result = null;
+    response.textContent = '';
+}
 
+function checkEntries() {
+    if (operatorClic > 1) {
+        reset();
+    }
+    if (calcEntry.value) {
+        let comaChanged = calcEntry.value.replace(',', '.'); /* change coma with dot, then parse the string */
+        let currentNumber = parseFloat(comaChanged);
+        if (isNaN(currentNumber)) {
+            alert('ceci n\'est pas un nombre');
+        } else if (!firstNumber) { /* if firstnumber have no value */
+            firstNumber = currentNumber; /* give first number the entry value */
+            response.textContent += String(firstNumber); /* add the value to the string response */
+        } else if (currentNumber == 0 && operator == 'divided') {
+            alert('diviser par 0 ? la tête à toto :P');
+        } else if (operatorClic == 0) {
+            console.log('choisissez un opérateur avant le second nombre');
+        } else if (!secondNumber) {
+            secondNumber = currentNumber;
+            response.textContent += String(secondNumber);
+        }
+    }
+}
+
+function calculate() {
+    if (event.target.className == 'reset') { //? reset ? ok
+        reset();
+    } else if (!operatorClic) {
+        if (!firstNumber) { // ? pas de 1er chiffre ? pas bon 
+            alert('entrez un nombre d\'abord');
+        } else if (event.target.className == 'equals') { // ? pas de secod chiffre ? pas bon
+            alert('choisissez un opérateur valide');
+        } else { // ? sinon ok pour enregistrer 1er chiffre et l'inscrire 
+            operator = event.target.className;
+            response.textContent += (' ' + operator + ' ');
+            calcEntry.value = ''; /* vide le champs */
+            calcEntry.focus();
+            operatorClic = 1;
+        }
+    } else if (operatorClic == 1) { //? equals par défaut
+        switch (operator) {
+            case 'plus':
+                result = (firstNumber + secondNumber);
+                break;
+            case 'minus':
+                result = firstNumber - secondNumber;
+                break;
+            case 'divided':
+                result = firstNumber / secondNumber;
+                break;
+            case 'multiplied':
+                result = firstNumber * secondNumber;
+                break;
+        }
+        calcEntry.value = ''; /* vide le champs */
+        calcEntry.focus();
+        response.textContent += ` = ${result}`;
+        operatorClic++;
+    } else {
+        reset();
+    }
+
+}
 // ! -------------------------- ex AJAX
 function myAjaxFunction() {
     if (this.status == 200 && this.readyState == 4) {
@@ -215,14 +295,18 @@ function myCallAjax() {
     xhr.send();
 }
 
-// * -------------------------------    APPLICATION   ----------------------------------//
+// * -----------------------------------------------    APPLICATION   ----------------------------------//
 window.addEventListener('scroll', function() {
     let currentScroll = window.scrollY;
-    // console.log(currentScroll, window.innerHeight);
     if (currentScroll > window.innerHeight / 3) {
         siteTitle.classList.add('on-scroll');
+        goku.classList.add('on-scroll');
     } else {
         siteTitle.classList.remove('on-scroll');
+        goku.classList.remove('on-scroll');
+    }
+    if (currentScroll > window.innerHeight / 3 - 10 && currentScroll < window.innerHeight / 3) {
+        jump.play();
     }
 });
 // ex1
@@ -245,129 +329,72 @@ email.addEventListener('focusin', resetResult);
 postcode.addEventListener('focusin', resetResult);
 
 // ex8
-let calcBtns = document.querySelectorAll('.calc-btns button');
-let calcBtnArray = Array.from(calcBtns);
-let calcEntry = document.querySelector('[name="number"]');
-let firstNumber;
-let secondNumber;
-
-function checkEntries() {
-    if (calcEntry.value) {
-        let comaChanged = calcEntry.value.replace(',', '.');
-        console.log(comaChanged);
-        let currentNumber = parseFloat(comaChanged);
-        if (isNaN(currentNumber)) {
-            alert('ceci n\'est pas un nombre');
-        } else if (currentNumber == 0) {
-            alert('la division ne sera pas possible');
-        } else if (firstNumber) {
-            if (secondNumber) {
-                secondNumber = currentNumber;
-            } else {
-                alert('cette calculette ne peut calculer que 2 nombres entre eux, appuyer sur C pour reset ou sur = pour le résultat')
-            }
-        } else {
-            firstNumber = currentNumber;
-        }
-    }
-}
-
-function calculate() {
-    let currentEvent = event.target.className;
-    let operator = 0;
-    if (operator == 1) {
-        alert('cette calculette ne peut calculer que 2 nombres entre eux, appuyer sur C pour reset ou sur = pour le résultat')
-    } else {
-        switch (currentEvent) {
-            case 'plus': // concatène nombre 1 et signe + add signe++
-            case 'minus': // concatène nombre 1 et signe + add signe++
-            case 'divided': // concatène nombre 1 et signe + add signe++
-            case 'multiplied': // concatène nombre 1 et signe + add signe++
-            case 'equals': // concatène première concaténation et second chiffre + affiche résulta + réinitialise nombre 1 et 2
-            case 'reset': // réinitialise nombre 1 et 2
-        }
-    }
-}
-
-/* 
-// verifier qu'il y a une entrée / vérifier que c'est un nombre
-// conserver ce nombre
-conserver le choix du calcul selon le bouton
-vérifier qu'il y a un nouveau nombre
-afficher le résultat avec le btn equals
-réinitialiser la méthode avec le bouton reset
-*/
-
 calcBtnArray.forEach(button => {
     button.addEventListener('click', calculate);
 });
 calcEntry.addEventListener('focusout', checkEntries);
 
-
-
-// * ex AJAX GET
+// * -----------------------------------------------------------------------------  ex AJAX GET
 xhr.addEventListener('readystatechange', myAjaxFunction);
 ajaxBtn.addEventListener('click', myCallAjax);
 
-// * ex jquery
-
+// ! -----------------------------------------------------------------------------  ex JQUERY
 $(document).ready(function() {
-    // select multiple > filter selection result(several kinds) + instruction
-    $('button').last().click(() => {
-        console.log("la couleur du premier btn est " + $('button').first().css('background-color'));
+        // select multiple > filter selection result(several kinds) + instruction
+        $('button').last().click(() => {
+            console.log("la couleur du premier btn est " + $('button').last().css('background-color'));
 
-        // select + instruction
-        $('h1').css('color', 'blue');
+            // select + instruction
+            $('h1').css('color', 'blue');
 
-        // select multiple with :not + several instructions
-        $('button').not('.jquery-btn').css('background-color', 'orange')
-            .css('border-radius', '50%')
-            .text('new btn');
+            // select multiple with :not + several instructions
+            $('button').not('.jquery-btn').css('background-color', 'orange')
+                .css('border-radius', '50%')
+                .text('new btn');
 
-        // select multiple > filter selection result + several instructions
-        $('button').last()
-            .css('background-color', 'green')
-            .text('reload page to get back')
-            .css('color', 'white');
+            // select (multiple) + use JS type instruction + point jquery variable with $('selecteur')
+            $('button').click(function() {
+                console.log("il y a " + $('button').length + " buttons");
+                console.log("celui-ci est le " + $(this).val().indexOf($(this)) + "e buttons");
+            });
 
-        // select (multiple) + use JS type instruction + point jquery variable with $('selecteur')
-        $('button').click(function() {
-            console.log("il y a " + $('button').length + " buttons");
-            console.log("celui-ci est le " + $(this).val().indexOf($(this)) + "e buttons");
+            // select > find child element into selection + instruction
+            $('.ex2 .enonce').find('p').css('color', 'violet');
+
+            // select + instruction > change selection on parent(s) > filter new selection + instruction 
+            $('.enonce').css('background-color', 'pink').parent().filter('.ex3').css('border', '4px dotted magenta');
+
+            // select + several instructions throught an object
+            $('.ex4 p').css({
+                "color": 'red',
+                "font-size": '1rem',
+                'etc': 'etc'
+            });
+
+            // select + instruction > add selection (scope general) + instruction > remove added selection + instruction
+            $('.ex5 p').css('color', 'blue').add($('h2')).css('text-transform', 'uppercase').end().css('font-style', 'italic');
+
+            // EVENTS
+            // events with several states (mouse, focus...) may have instructions set as function-arg
+            $('[alt="chuck"]').hover(
+                // 1 : mouseenter instruction
+                () => { console.log('la souris est entrée'); },
+                // 2 : mouseleave instruction
+                () => { console.log('la souris est sortie'); }
+            );
+            // select several event
+            $('button').on('mouseover click', function(e) {
+                console.log('either mouseover or click happened');
+            });
+
+            // creating a new button 
+            $('.jquery-btn').parent().html('<button></button>').children().click(() => { location.reload(); });
+
+            // select multiple > filter selection result + several instructions
+            $('button').last()
+                .css('background-color', 'green')
+                .text('get me out of this messÈø!')
+                .css('color', 'white');
         });
-
-        // select > find child element into selection + instruction
-        $('.ex2 .enonce').find('p').css('color', 'violet');
-
-        // select + instruction > change selection on parent(s) > filter new selection + instruction 
-        $('.enonce').css('background-color', 'pink').parent().filter('.ex3').css('border', '4px dotted magenta');
-
-        // select + several instructions throught an object
-        $('.ex4 p').css({
-            "color": 'red',
-            "font-size": '1rem',
-            'etc': 'etc'
-        });
-
-        // select + instruction > add selection (scope general) + instruction > remove added selection + instruction
-        $('.ex5 p').css('color', 'blue').add($('h2')).css('text-transform', 'uppercase').end().css('font-style', 'italic');
-
-        // EVENTS
-        // events with several states (mouse, focus...) may have instructions set as function-arg
-        $('[alt="chuck"]').hover(
-            // 1 : mouseenter instruction
-            () => { console.log('la souris est entrée'); },
-            // 2 : mouseleave instruction
-            () => { console.log('la souris est sortie'); }
-        );
-        // select several event
-        $('button').on('mouseover click', function(e) {
-            console.log('either mouseover or click happened');
-        })
-
-    });
-
-
-})
-
-// event delegation : event on parent -> instruction on child target.tagName == 'child tag selector name'
+    })
+    // event delegation : event on parent -> instruction on child target.tagName == 'child tag selector name'

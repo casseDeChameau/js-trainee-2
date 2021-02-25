@@ -25,6 +25,19 @@
     }
 }
 
+.sangoku {
+    position: fixed;
+    top: -40vmin;
+    right: -30vmin;
+    transform: rotate(200deg);
+    width: 30vmin;
+    transition: .3s ease-in-out;
+    &.on-scroll {
+        top: -15vmin;
+        right: -6vmin;
+    }
+}
+
 .exercice {
     width: 80%;
     height: 100%;
